@@ -5,14 +5,18 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "ingredients": "node src/utils/seeds/ingredient.seed.js",
+    "recipes": "node src/utils/seeds/recipe.seed.js",
     "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.1"
   },
   "devDependencies": {

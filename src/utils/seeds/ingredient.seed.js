@@ -1,4 +1,9 @@
+require('dotenv').config();
+const mongoose = require('mongoose');
+const Ingredient = require('../../api/models/Ingredient');
+
 const ingredients = [
+    /* Espaguetis a la Boloñesa */
     {
         name: 'Carne molida',
         img: '',
@@ -23,6 +28,7 @@ const ingredients = [
         category: 'Condimento',
         nutritional_info: 'Beneficios para la salud'
     },
+    /* Ensalada César */
     {
         name: 'Lechuga romana',
         img: '',
@@ -47,6 +53,7 @@ const ingredients = [
         category: 'Condimento',
         nutritional_info: 'Sabor intenso'
     },
+    /* Tacos de pescado */
     {
         name: 'Filetes de pescado',
         img: '',
@@ -83,6 +90,7 @@ const ingredients = [
         category: 'Hierba',
         nutritional_info: 'Beneficios antioxidantes'
     },
+    /* Enchiladas de pollo */
     {
         name: 'Pechugas de pollo cocidas y desmenuzadas',
         img: '',
@@ -119,6 +127,7 @@ const ingredients = [
         category: 'Lácteo',
         nutritional_info: 'Moderada en grasas'
     },
+    /* Risotto de Champiñones */
     {
         name: 'Arroz Arborio',
         img: '',
@@ -156,3 +165,20 @@ const ingredients = [
         nutritional_info: 'Intenso sabor y calcio'
     }
 ];
+
+mongoose.connect(process.env.DB_URL)
+    .then(async () => {
+        const ingredientsCollection = await Ingredient.find();
+        if (ingredientsCollection.length) {
+            await Ingredient.collection.drop();
+            console.log(`The ingredients collection's been dropped`);
+        }
+    })
+    .catch(err => console.log(`Error deleting data: ${err}`))
+    .then(async () => {
+        const ingredientsData = ingredients.map(product => new Ingredient(product));
+        await Ingredient.insertMany(ingredientsData);
+        console.log('The new ingredients data are inserted on the DB');
+    })
+    .catch(error => console.log(`Error creating the new data: ${error}`))
+    .finally(() => mongoose.disconnect());
