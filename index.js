@@ -8,20 +8,21 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+});
+
 const { connectDB } = require('./src/config/db');
 connectDB();
 
 const pong = (req, res, next) => res.status(200).json('Pong!');
 app.use('/ping', pong);
 
-const ingredientsRouter = require('./src/api/routes/ingredient.routes');
-app.use('/api/v1/ingredients', ingredientsRouter);
-
-const recipesRouter = require('./src/api/routes/recipe.routes');
-app.use('/api/v1/recipes', recipesRouter);
-
-const usersRouter = require('./src/api/routes/user.routes');
-app.use('/api/v1/users', usersRouter);
+const mainRouter = require('./src/api/routes/router');
+app.use('/api/v1', mainRouter);
 
 app.use('*', async (req, res, next) => res.status(404).json('Route not found'));
 

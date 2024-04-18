@@ -1,13 +1,14 @@
 const express = require('express');
 const ingredientsRouter = express.Router();
-const { isAuth, isAdmin } = require('../../middlewares/auth');
+const { isAdmin } = require('../../middlewares/auth');
+const upload = require('../../middlewares/file');
 const { getIngredients, postIngredient, updateIngredient, deleteIngredient } = require('../controllers/ingredient');
 
 ingredientsRouter.get('/', getIngredients);
 
-ingredientsRouter.post('/', isAuth, postIngredient);
+ingredientsRouter.post('/', isAdmin, upload.single('img'), postIngredient);
 
-ingredientsRouter.put('/:id', isAdmin, updateIngredient);
+ingredientsRouter.put('/:id', isAdmin, upload.single('img'), updateIngredient);
 
 ingredientsRouter.delete('/:id', isAdmin, deleteIngredient);
 
