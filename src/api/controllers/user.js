@@ -56,6 +56,7 @@ const login = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
     try {
         const { id } = req.params;
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
         const newUser = new User(req.body);
         newUser._id = id;
 
